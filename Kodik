@@ -1,0 +1,1061 @@
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstring>
+#include <chrono>
+
+using namespace std;
+using namespace std::chrono;
+
+
+    // определение структуры Студенты
+    struct Students
+    {
+        string FIO;
+        int GroupNumber;
+        int NumberInGroup;
+        string Sex;
+        int ratings[8];
+        string FormEducation;
+        string Date;
+    };
+
+    //индексация студентов
+    void List(vector<Students> assistant, int n, int i)
+    {
+        setlocale(LC_ALL, "Russian");
+        cout << "ФИО:" << assistant[i].FIO << "\n";
+        cout << "Номер группы:" << assistant[i].GroupNumber << "\n";
+        cout << "Номер в группе:" << assistant[i].NumberInGroup << "\n";
+        cout << "Пол:" << assistant[i].Sex << "\n";
+        cout << "Форма обучения:" << assistant[i].FormEducation << "\n";
+        cout << "Рейтинг:";
+        for (int j = 0; j < 8; j++) //ограничение количества оценок по условию
+            cout << assistant[i].ratings[j] << " ";
+        cout << "\n";
+        cout << "Дата и время записи:" << assistant[i].Date << "\n\n";
+
+    }
+
+    //вывод всех студентов от одного до n
+    void AllStudents(vector<Students> assistant, int n)
+    {
+        setlocale(LC_ALL, "Russian");
+        int stud;
+        cout << "Список всех студентов:\n\n";
+        for (int i = 0; i < n; i++)
+        {
+            stud = i + 1;
+            cout << "Студент " << stud << "\n\n";
+            cout << "ФИО:" << assistant[i].FIO << "\n";
+            cout << "Номер группы:" << assistant[i].GroupNumber << "\n";
+            cout << "Номер в группе:" << assistant[i].NumberInGroup << "\n";
+            cout << "Пол:" << assistant[i].Sex << "\n";
+            cout << "Форма обучения:" << assistant[i].FormEducation << "\n";
+            cout << "Рейтинг:";
+            for (int j = 0; j < 8; j++)
+                cout << assistant[i].ratings[j] << " ";
+            cout << "\n";
+            cout << "Дата и время записи:" << assistant[i].Date << "\n\n";
+        }
+        cout << "\n\n";
+        system("pause");
+        system("cls");
+    }
+
+    //добавление студента
+    void AddStudent(vector<Students> & assistant, int& n)
+    {
+        setlocale(LC_ALL, "Russian");
+        n++;
+        assistant.resize(n);
+        int i = n - 1;
+        ofstream  add;
+        add.open("students.txt", fstream::app);
+        if (!add.is_open())
+        {
+            cout << "\nОшибка открытия файла";
+        }
+        else { //запись данных в структуру
+
+            cout << "Введите фамилию, имя и отчество: ";
+            cin.ignore();
+            getline(cin, assistant[i].FIO);
+            add << assistant[i].FIO << "\n";
+            cout << "Введите номер группы: ";
+            cin >> assistant[i].GroupNumber;
+            add << assistant[i].GroupNumber << "\n";
+            cout << "Введите номер в группе: ";
+            cin >> assistant[i].NumberInGroup;
+            add << assistant[i].NumberInGroup << "\n";
+            cout << "Введите пол человека: ";
+            cin.ignore();
+            getline(cin, assistant[i].Sex);
+            add << assistant[i].Sex << "\n";
+            cout << "Введите форму обучения: ";
+            getline(cin, assistant[i].FormEducation);
+            add << assistant[i].FormEducation << "\n";
+            for (int j = 0; j < 8; j++)
+            {
+                cout << "Введите рейтинг: ";
+                cin >> assistant[i].ratings[j];
+            }
+            for (int j = 0; j < 8; j++)
+                add << assistant[i].ratings[j] << " ";
+            add << "\n";
+            cout << "Введите дату и время записи: ";
+            cin.ignore();
+            getline(cin, assistant[i].Date);
+            add << assistant[i].Date << "\n";
+
+        }
+        add.close();
+        system("pause");
+        system("cls");
+    }
+
+    //запись в файл
+    void NewEntry(vector<Students> & assistant, int& n)
+
+    {
+        setlocale(LC_ALL, "Russian");
+        ofstream input;
+        input.open("students.txt");
+        if (!input.is_open())
+        {
+            cout << "\nОшибка открытия файла";
+        }
+        else {
+
+            for (int i = 0; i < n; i++)
+            {
+                input << assistant[i].FIO << "\n";
+                input << assistant[i].GroupNumber << "\n";
+                input << assistant[i].NumberInGroup << "\n";
+                input << assistant[i].Sex << "\n";
+                input << assistant[i].FormEducation << "\n";
+                for (int j = 0; j < 8; j++)
+                    input << assistant[i].ratings[j] << " ";
+                input << "\n";
+                input << assistant[i].Date << "\n";
+            }
+        }
+        input.close();
+    }
+    //изменение данных
+    void ChangingData(vector<Students> & assistant, int& n)
+    {
+        setlocale(LC_ALL, "Russian");
+        int i, shift;
+        cout << "Введите номер студента от 1 до " << n << "\n";
+        cout << "Вы ввели: ";
+        cin >> i;
+        i--;
+        cout << "\nЧто нужно изменить\n\n";
+        cout << "1 - фамилия, имя и отчество\n";
+        cout << "2 - номер группы\n";
+        cout << "3 - номер в группе\n";
+        cout << "4 - пол\n";
+        cout << "5 - форма обучения\n";
+        cout << "6 - рейтинг\n";
+        cout << "7 - дата и время записи\n";
+        cout << "\nВы ввели: ";
+        cin >> shift;
+        cout << "\n";
+        switch (shift)
+        {
+        case 1:
+            cout << "Введите фамилию, имя и отчество: ";
+            cin.ignore();
+            getline(cin, assistant[i].FIO);
+            break;
+        case 2:
+            cout << "Введите номер группы: ";
+            cin >> assistant[i].GroupNumber;
+            break;
+        case 3:
+            cout << "Введите номер в группе: ";
+            cin >> assistant[i].NumberInGroup;
+            break;
+        case 4:
+            cout << "Введите пол человека: ";
+            cin.ignore();
+            getline(cin, assistant[i].Sex);
+            break;
+        case 5:
+            cout << "Введите форму обучения: ";
+            cin.ignore();
+            getline(cin, assistant[i].FormEducation);
+            break;
+        case 6:
+            for (int j = 0; j < 8; j++)
+            {
+                cout << "Введите рейтинг: ";
+                cin >> assistant[i].ratings[j];
+            }
+            break;
+        case 7:
+            cout << "Введите дату и время записи: ";
+            cin.ignore();
+            getline(cin, assistant[i].Date);
+            break;
+        }
+        NewEntry(assistant, n);
+        system("pause");
+        system("cls");
+    }
+
+    //данные студентов определенной группы
+    void StudentsOfGroupN(vector<Students> assistant, int n)
+    {
+        setlocale(LC_ALL, "Russian");
+        int entered, control = 0;
+        cout << "Введите номер группы";
+        cout << "\nВы ввели: ";
+        cin >> entered; cout << "\n";
+        for (int i = 0; i < n; i++)
+        {
+            if (assistant[i].GroupNumber == entered)
+            {
+                List(assistant, n, i);
+                control = 1;
+            }
+
+        }
+        if (control == 0)
+            cout << "Такой группы нет";
+        cout << "\n\n";
+        system("pause");
+        system("cls");
+    }
+
+    //топ 3 
+    void rating(vector<Students> assistant, int n)
+    {
+        setlocale(LC_ALL, "Russian");
+        double* rating = new double[n];
+        double first = 0, second = 0, third = 0, dub = 0.0;
+        int top1 = 0, top2 = 0, top3 = 0;
+        for (int i = 0; i < n; i++) { //средний балл
+            for (int j = 0; j < 8; j++)
+                dub += assistant[i].ratings[j];
+            dub /= 8;
+            rating[i] = dub;
+            dub = 0;
+        }
+        for (int i = 0; i < n; i++) //поиск самого высокого ср балла
+        {
+            if (rating[i] > first)
+            {
+                first = rating[i]; top1 = i;
+            }
+        }
+        for (int i = 0; i < n; i++) //топ 2
+        {
+            if (rating[i] > second && assistant[i].FIO != assistant[top1].FIO)
+            {
+                second = rating[i]; top2 = i;
+            }
+        }
+        for (int i = 0; i < n; i++) //топ 3
+        {
+            if (rating[i] > third && assistant[i].FIO != assistant[top1].FIO && assistant[i].FIO != assistant[top2].FIO)
+            {
+                third = rating[i]; top3 = i;
+            }
+        }
+        cout << "Топ-1: " << first << "\n\n";
+        List(assistant, n, top1);
+        cout << "\n\nТоп-2: " << second << "\n\n";
+        List(assistant, n, top2);
+        cout << "\n\nТоп-3: " << third << "\n\n";
+        List(assistant, n, top3);
+        delete[] rating;
+        system("pause");
+        system("cls");
+    }
+
+    //количество мужчин и женщин
+    void QuantityMF(vector<Students> assistant, int n)
+    {
+        setlocale(LC_ALL, "Russian");
+        int men = 0, women = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (assistant[i].Sex == "F") women++;
+            if (assistant[i].Sex == "M") men++;
+
+        }
+        cout << "\nКоличество женщин: " << women << "\n\n";
+        cout << "Количество мужчин: " << men;
+        cout << "\n\n\n";
+        system("pause");
+        system("cls");
+    }
+
+    //количество студентов со стипендией
+    void Scholarship(vector<Students> assistant, int n)
+    {
+        setlocale(LC_ALL, "Russian");
+        int bb = 0, sum = 0;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < 8; j++)
+                if (assistant[i].ratings[j] == 3 || assistant[i].ratings[j] == 2)
+                    bb = 1;
+            if (assistant[i].FormEducation == "day" && bb == 0)
+                sum++;
+            bb = 0;
+        }
+        cout << "\n\nКоличество студентов со стипендией: " << sum << "\n\n\n";
+        system("pause");
+        system("cls");
+    }
+
+    //оценки и стипендии
+    void Task8(vector<Students> assistant, int n)
+    {
+        setlocale(LC_ALL, "Russian");
+        int control = 0;
+        cout << "Студенты, которые не получают стипендию:\n\n";
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < 8; j++)
+                if (assistant[i].ratings[j] == 3 || assistant[i].ratings[j] == 2)
+                    control = 1;
+
+            if (assistant[i].FormEducation == "evening" || control == 1)
+            {
+                List(assistant, n, i);
+            }
+
+            control = 0;
+        }
+        system("pause"); system("cls");
+        cout << "Студенты с оценками 5 и 4:\n\n";
+        int fives = 0, fours = 0;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                if (assistant[i].ratings[j] == 2) control = 1;
+                if (assistant[i].ratings[j] == 3) control = 1;
+                if (assistant[i].ratings[j] == 5) fives++;
+                if (assistant[i].ratings[j] == 4) fours++;
+            }
+            if (control == 0 && fives < 8 && fours > 0)
+            {
+                List(assistant, n, i);
+            }
+            fives = 0;
+            control = 0;
+        }
+        system("pause"); system("cls");
+        cout << "Отличники:\n\n";
+        int excellent = 0;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < 8; j++)
+                if (assistant[i].ratings[j] == 5) excellent++;
+
+            if (excellent == 8)
+            {
+                List(assistant, n, i);
+            }
+            excellent = 0;
+        }
+        cout << "\n\n";
+        system("pause");
+        system("cls");
+    }
+
+    //данные студентов с определенным номером
+    void StudentsUnderNumberN(vector<Students> assistant, int n)
+    {
+        setlocale(LC_ALL, "Russian");
+        int number, control = 0;
+        cout << "Введите номер студента в группе:";
+        cin >> number; cout << "\n";
+        for (int i = 0; i < n; i++)
+        {
+            if (assistant[i].NumberInGroup == number)
+            {
+                List(assistant, n, i);
+                control = 1;
+            }
+
+        }
+
+        if (control == 0) cout << "Такого номера нет";
+        cout << "\n\n";
+        system("pause");
+        system("cls");
+    }
+
+    
+    // лаба 2
+    struct list
+    {
+        int data;
+        list* prev;
+        list* next;
+    };
+
+    int count_ = 0;
+    list* head = NULL, * tail = NULL;
+
+
+    //поск индекса элемента num
+    int SerchInd_l(int num)
+    {
+        list* t = head;
+        int serch_c = 0;
+        while (t) {
+
+            if (t->data == num)
+            {
+                return serch_c;
+                break;
+            }
+            t = t->next;
+            serch_c++;
+
+        }
+    }
+    //поиск элемента с индексом num
+    list* SerchData_l(int num)
+    {
+        list* t = head;
+        int serch_c = 0;
+        while (t) {
+
+            if (serch_c == num)
+            {
+                return t;
+                break;
+            }
+            t = t->next;
+            serch_c++;
+
+        }
+    }
+
+    int SerchData_l3(int num)
+    {
+        list* t = head;
+        int serch_c = 0;
+        while (t) {
+
+            if (serch_c == num)
+            {
+                return t->data;
+                break;
+            }
+            t = t->next;
+            serch_c++;
+
+        }
+    }
+    //заполнение списка
+    void Add_list(int x) {
+        list* temp = new list;
+        temp->data = x;
+        temp->next = NULL;
+        count_++;
+        if (!head) {
+            temp->prev = NULL;
+            head = temp;
+            tail = head;
+        }
+        else {
+            temp->prev = tail;
+            tail->next = temp;
+            tail = temp;
+        }
+    }
+    //вставка элемента не в начало списка
+    void Add_In(list* elem, int num)
+    {
+        list* NewEl = new list;
+
+        NewEl->data = num;
+        if (elem->next == NULL) NewEl->next = NULL;
+        else  NewEl->next = elem->next;
+        elem->next = NewEl;
+        NewEl->prev = elem;
+
+
+
+        if (elem->next != NULL) elem->next->prev = NewEl;
+        if (NewEl->next == NULL) tail = NewEl;
+    }
+    //вставка элемента в начало списка
+    void First_In(int num)
+    {
+        list* NewEl = new list;
+        list* tmp = head;
+        NewEl->prev = NULL;
+        NewEl->next = head;
+        NewEl->data = num;
+
+        tmp->prev = NewEl;
+        tmp->next = head->next;
+
+        head = NewEl;
+    }
+    //вставка элемента
+    void Insert_list(int in, int ch)
+    {
+        count_++;
+        int ind, num = ch, c = 0;
+        ind = in;
+        list* per = head;
+
+        while (per != NULL)
+        {
+            if (ind == 0)
+            {
+                First_In(num);
+                break;
+            }
+            if (c == ind - 1)
+            {
+                Add_In(per, num);
+                break;
+            }
+            per = per->next; c++;
+        }
+    }
+    //вывод списка
+    void Show_list() {
+        list* t = head;
+        while (t) {
+            cout << t->data << " ";
+            t = t->next;
+        }
+        cout << "\n\n";
+    }
+    //удаление элемента по индексу
+    void Del_list(int x)
+    {
+        if ((x == 0) and (head->next)) {
+            list* temp = head;
+            head = head->next;
+            head->prev = NULL;
+            delete temp;
+            count_--;
+            return;
+        }
+        else if ((x == 0) and (head == tail)) {
+
+            head->next = NULL;
+            head = NULL;
+            delete head;
+            count_ = 0;
+            return;
+        }
+
+        if (x == count_ - 1) {
+            list* temp = tail;
+            tail = tail->prev;
+            tail->next = NULL;
+            delete temp;
+            count_--;
+            return;
+        }
+
+
+        list* temp = SerchData_l(x);
+
+        list* prev_el, * next_el;
+
+        temp->prev->next = temp->next;
+        temp->next->prev = temp->prev;
+
+        delete temp;
+        count_--;
+
+    }
+    //заполнение списка 1 способом
+    void Fill_list1(int N)
+    {
+        int elem;
+        for (int i = 0; i < N; i++)
+        {
+            elem = rand() % 199 - 99;
+            Add_list(elem);
+        }
+    }
+    //заполнение списка 2 способом
+    void Fill_list3()
+    {
+        ifstream f;
+        f.open("file.txt");
+        if (!f.is_open())
+        {
+            cout << "\nFile opening error";
+        }
+        else {
+            int i = 0, x;
+            while (!f.eof())
+            {
+                f >> x;
+                Add_list(x);
+                i++;
+            }
+
+        }
+        f.close();
+    }
+  
+
+    //вывод массива
+    void Show_mas(int const* mas_dyn, int const& dyn)
+    {
+        for (int i = 0; i < dyn; i++)
+        {
+            cout << mas_dyn[i] << " ";
+        }
+
+    }
+    //заполнение массива 1 способом
+    void Fill_mas1(int& dyn_a, int* mas_dyn)
+    {
+
+        for (int i = 0; i < dyn_a; i++)
+        {
+            mas_dyn[i] = rand() % 199 - 99;
+        }
+
+    }
+    //заполнение массива 2 способом
+    void Fill_mas2(int& dyn_b, int* mas_dyn)
+    {
+        int tmp = 0;
+        while (tmp != -1)
+        {
+            cin >> tmp;
+            if (tmp == -1)return;
+            mas_dyn[dyn_b] = tmp;
+            dyn_b++;
+        }
+        system("cls");
+    }
+  
+    //расширение массива на 1
+    void Resize_P(int& N, int*& mas_dyn)
+    {
+        int N2; N2 = N + 1;
+        int* mas_rez = new int[N2];
+
+        for (int i = 0; i < N2; i++)
+            mas_rez[i] = mas_dyn[i];
+
+        delete[] mas_dyn;
+
+
+        mas_dyn = mas_rez;
+
+    }
+    //уменьшение массива на 1
+    void Resize_M(int& N, int*& mas_dyn)
+    {
+        int N2; N2 = N - 1;
+        int* mas_rez = new int[N2];
+
+        for (int i = 0; i < N2; i++)
+            mas_rez[i] = mas_dyn[i];
+
+        delete[] mas_dyn;
+
+
+        mas_dyn = mas_rez;
+        N = N2;
+    }
+    //вставка элемента в массив
+    void Insert_mas(int& N, int*& mas_dyn, int ind, int ch)
+    {
+        int newi = ind; int i_num = ch;
+        Resize_P(N, mas_dyn);
+
+
+        for (int i = N - 1; i >= newi; i--)
+            mas_dyn[i + 1] = mas_dyn[i];
+
+        mas_dyn[newi] = i_num;
+        N++;
+
+    }
+    //удаление элемента по индексу
+    void Del_mas(int& N, int*& mas_dyn, int del)
+    {
+
+        for (int i = del; i < N - 1; i++)
+            mas_dyn[i] = mas_dyn[i + 1];
+
+        Resize_M(N, mas_dyn);
+
+    }
+    //поиск индекса ind элемента ch
+    int SerchInd_m(int N, int* dyn_mas, int ch)
+    {
+        for (int i = 0; i < N; i++)
+        {
+            if (dyn_mas[i] == ch) return i;
+        }
+    }
+    //поиск элемента с индексом ind
+    int SerchData_m(int N, int* dyn_mas, int ind)
+    {
+        for (int i = 0; i < N; i++)
+        {
+            if (i == ind) return dyn_mas[i];
+        }
+
+    }
+
+    
+    void Task_fill_time1(int*& mas_dyn, int& N)
+    {
+        setlocale(LC_ALL, "Russian");
+        auto begin_m = steady_clock::now();
+        Fill_mas1(N, mas_dyn);
+        auto end_m = steady_clock::now();
+        auto elepsed_m = duration_cast<nanoseconds>(end_m - begin_m);
+        Show_mas(mas_dyn, N);
+        cout << "\n\nЗатраченное время в наносекундах: " << elepsed_m.count() << "\n\n\n";
+
+        auto begin_l = steady_clock::now();
+        Fill_list1(N);
+        auto end_l = steady_clock::now();
+        auto elepsed_l = duration_cast<nanoseconds>(end_l - begin_l);
+        Show_list();
+        cout << "Затраченное время в наносекундах: " << elepsed_l.count() << "\n";
+    }
+
+    void Task_fill_time2(int*& mas_dyn, int& N)
+    {
+        setlocale(LC_ALL, "Russian");
+
+        auto fillmasB = steady_clock::now();
+        Fill_mas2(N, mas_dyn);
+        auto fillmasE = steady_clock::now();
+        auto elepsed_mas = duration_cast<nanoseconds>(fillmasE - fillmasB);
+        Show_mas(mas_dyn, N);
+        cout << "\n\nЗатраченное время в наносекундах: " << elepsed_mas.count() << "\n\n\n";
+
+    }
+
+
+    void Task_insert_time(int*& mas_dyn, int& N)
+    {
+        setlocale(LC_ALL, "Russian");
+        int ind, ch;
+        cout << "Массив\n"; Show_mas(mas_dyn, N);
+        cout << "\n\nВведите индекс для вставки: "; cin >> ind;
+        cout << "Введите новый элемент: "; cin >> ch;
+        auto begin_m = steady_clock::now();
+        Insert_mas(N, mas_dyn, ind, ch);
+        auto end_m = steady_clock::now();
+        auto elepsed_m = duration_cast<nanoseconds>(end_m - begin_m);
+        cout << "\nМассив после вставки\n"; Show_mas(mas_dyn, N);
+        cout << "\n\nЗатраченное время в наносекундах: " << elepsed_m.count() << "\n\n\n";
+
+        cout << "Список\n"; Show_list();
+        cout << "Введите индекс для вставки: "; cin >> ind;
+        cout << "Введите новый элемент: "; cin >> ch; cout << "\n";
+        auto begin_l = steady_clock::now();
+        Insert_list(ind, ch);
+        auto end_l = steady_clock::now();
+        auto elepsed_l = duration_cast<nanoseconds>(end_l - begin_l);
+        cout << "\nСписок после вставки\n"; Show_list();
+        cout << "Затраченное время в наносекундах: " << elepsed_l.count() << "\n\n";
+
+    }
+
+    void Task_del_time(int*& mas_dyn, int& N)
+    {
+        setlocale(LC_ALL, "Russian");
+        int ch = 0, e, pr;
+        cout << "если вставить в массив по значению введите 1 если по индексу введите 2\n";
+        cout << "Вы выбрали: "; cin >> pr; cout << "\n\n" << "Array\n";
+        Show_mas(mas_dyn, N); cout << "\n\n";
+        if (pr == 1) { cout << "Введите элемент для удаления: "; cin >> e; ch = SerchInd_m(N, mas_dyn, e); cout << "\n"; }
+        if (pr == 2) { cout << "Введите индекс для удаления: "; cin >> ch; cout << "\n"; }
+
+        auto begin_m = steady_clock::now();
+        Del_mas(N, mas_dyn, ch);
+        auto end_m = steady_clock::now();
+        auto elepsed_m = duration_cast<nanoseconds>(end_m - begin_m);
+        cout << "Массив после удаления элемента\n"; Show_mas(mas_dyn, N);
+        cout << "\n\nЗатраченное время в наносекундах: " << elepsed_m.count() << "\n\n\n";
+
+        cout << "\nесли вставить в список по значению введите 1 если по индексу введите 2\n";
+        cout << "Вы выбрали: "; cin >> pr; cout << "\n" << "list\n";
+        Show_list();
+        if (pr == 1) { cout << "Введите элемент для удаления: "; cin >> e; ch = SerchInd_l(e); cout << "\n"; }
+        if (pr == 2) { cout << "Введите индекс для удаления: "; cin >> ch; cout << "\n"; }
+
+        auto begin_l = steady_clock::now();
+        Del_list(ch);
+        auto end_l = steady_clock::now();
+        auto elepsed_l = duration_cast<nanoseconds>(end_l - begin_l);
+        cout << "Список после удаления элемента\n"; Show_list();
+        cout << "Затраченное время в наносекундах: " << elepsed_l.count() << "\n\n";
+
+    }
+
+    void Task_find_time(int*& mas_dyn, int& N)
+    {
+        setlocale(LC_ALL, "Russian");
+        int Find_m, Fch_m, Find_l, Fch_l, choose_;
+
+        cout << "Если вам нужно получить индекс введенного номера, нажмите 1,если номер с определенным индексом, нажмите 2\n";
+        cout << "Вы выбрали: "; cin >> choose_;
+        //получение числа 
+        if (choose_ == 1)
+        {
+            cout << "\n\nМассив\n";
+            Show_mas(mas_dyn, N); cout << "\n\n";
+            cout << "\nВведите номер: "; cin >> Fch_m;
+            cout << "Номер индекса: ";
+            auto begin_m = steady_clock::now();
+            cout << SerchInd_m(N, mas_dyn, Fch_m);
+            auto end_m = steady_clock::now();
+            auto elepsed_m = duration_cast<nanoseconds>(end_m - begin_m);
+            cout << "\n\nЗатраченное время в наносекундах: " << elepsed_m.count();
+
+            cout << "\n\n\nlist\n";
+            Show_list(); cout << "\n";
+            cout << "Введите номер: "; cin >> Fch_l;
+            cout << "Номер индекса: ";
+            auto begin_l = steady_clock::now();
+            cout << SerchInd_l(Fch_l);
+            auto end_l = steady_clock::now();
+            auto elepsed_l = duration_cast<nanoseconds>(end_l - begin_l);
+            cout << "\n\nЗатраченное время в наносекундах: " << elepsed_l.count() << "\n\n";
+        }
+        //получение индекса
+        if (choose_ == 2)
+        {
+            cout << "\n\nArray\n";
+            Show_mas(mas_dyn, N); cout << "\n\n";
+            cout << "\nВведите индекс: "; cin >> Find_m;
+            auto begin_m = steady_clock::now();
+            cout << "Номер: ";
+            cout << SerchData_m(N, mas_dyn, Find_m);
+            auto end_m = steady_clock::now();
+            auto elepsed_m = duration_cast<nanoseconds>(end_m - begin_m);
+            cout << "\n\nЗатраченное время в наносекундах: " << elepsed_m.count() << "\n\n";
+
+            cout << "\n\n\nlist\n";
+            Show_list(); cout << "\n";
+            cout << "Введите индекс: "; cin >> Find_l;
+            cout << "Номер: ";
+            auto begin_l = steady_clock::now();
+            cout << SerchData_l3(Find_l);
+            auto end_l = steady_clock::now();
+            auto elepsed_l = duration_cast<nanoseconds>(end_l - begin_l);
+            cout << "\n\nЗатраченное время в наносекундах: " << elepsed_l.count() << "\n\n";
+
+        }
+
+
+
+    }
+
+
+
+    int main()
+    {
+        setlocale(LC_ALL, "Russian");
+        int end = 1;
+        while (end)
+        {
+            int n;
+            cout << "Введите номер лабораторной работы: ";
+            cin >> n;
+            switch (n)
+            {
+            case 1:
+            {
+                
+                ifstream file;
+                file.open("students.txt");
+                int n = 0, vybor;
+                while (!file.eof())
+                {
+                    if (file.get() == '\n')
+                        n++;
+                }
+                n = n / 7;// количество студентов
+                file.close();
+                cout << "Количество студентов в списке: " << n << "\n\n";
+                vector<Students>assistant(n);
+                ifstream file2;
+                file2.open("students.txt");
+                if (!file2.is_open())
+                {
+                    cout << "\nОшибка открытия файла";
+                }
+                else {
+
+                    for (int i = 0; i < n; i++)
+                    {
+                        getline(file2, assistant[i].FIO);
+                        file2 >> assistant[i].GroupNumber; file2.ignore();
+                        file2 >> assistant[i].NumberInGroup; file2.ignore();
+                        getline(file2, assistant[i].Sex);
+                        getline(file2, assistant[i].FormEducation);
+                        for (int j = 0; j < 8; j++)
+                        {
+                            file2 >> assistant[i].ratings[j];
+                        }
+                        file2.ignore(2);
+                        getline(file2, assistant[i].Date);
+
+                    }
+                }
+                file2.close();
+
+                do
+                {
+                    cout << "Выберите номер задания\n\n";
+                    cout << "[1]  Создание новой записи о студенте\n";
+                    cout << "[2]  Внесение изменений в уже существующую запись\n";
+                    cout << "[3]  Вывод всех данных о студентах\n";
+                    cout << "[4]  Вывод информации обо всех студентах группы N\n";
+                    cout << "[5]  Вывод топа самых успешных студентов с наивысшим по рейтингу средним баллом за прошедшую сессию\n";
+                    cout << "[6]  Вывод количества студентов мужского и женского пола\n";
+                    cout << "[7]  Определение количества студентов, которые будут получать стипендию\n";
+                    cout << "[8]  Вывод данных о студентах, которые: не получают стипендию, учатся только на хорошо и отлично, учатся только на отлично\n";
+                    cout << "[9]  Вывод данных о студентах, имеющих номер в списке – k\n";
+                    cout << "[0]  Выход\n\n";
+                    cout << "Вы выбрали: ";
+                    cin >> vybor;
+                    system("cls");
+                    switch (vybor)
+                    {
+                    case 1:
+                        AddStudent(assistant, n);
+                        break;
+
+                    case 2:
+                        ChangingData(assistant, n);
+                        break;
+
+                    case 3:
+                        AllStudents(assistant, n);
+                        break;
+
+                    case 4:
+                        StudentsOfGroupN(assistant, n);
+                        break;
+
+                    case 5:
+                        rating(assistant, n);
+                        break;
+
+                    case 6:
+                        QuantityMF(assistant, n);
+                        break;
+
+                    case 7:
+                        Scholarship(assistant, n);
+                        break;
+
+                    case 8:
+                        Task8(assistant, n);
+                        break;
+
+                    case 9:
+                        StudentsUnderNumberN(assistant, n);
+                        break;
+
+                    case 0:
+
+                        break;
+                    }
+
+                } while (vybor != 0);
+                return 0;
+            }
+            case 2:
+            {
+                int N = 100, fill, task;
+                int* mas_dyn = new int[N];
+
+                cout << "Выберите способ заполнения массива и списка\n\n";
+                cout << "[1] - Введите количество элементов в массиве и списке, которые будут автоматически заполнены случайными числами\n";
+                cout << "[2] - Введите элементы массива и списка в консоль, N определяется автоматически по количеству введенных элементов\n";
+                cout << "Вы выбрали: ";
+                cin >> fill; cout << "\n\n";
+                system("pause"); system("cls");
+
+                switch (fill)
+                {
+                case 1:
+                    cout << "Введите количество элементов\n" << "Вы выбрали: ";
+                    cin >> N; cout << "\n\n";
+                    Task_fill_time1(mas_dyn, N);
+                    break;
+                case 2:
+                    N = 0;
+                    Task_fill_time2(mas_dyn, N);
+                    break;
+                }
+
+                cout << "\n\n";
+
+                do
+                {
+
+                    cout << "Выберите задачу\n";
+                    cout << "[1] - Сравнение времени вставки\n";
+                    cout << "[2] - Сравнение времени удаления\n";
+                    cout << "[3] - Сравнение времени получения\n";
+                    cout << "[0] - Выход\n\n";
+                    cout << "Вы выбрали: "; cin >> task;
+                    system("cls");
+                    switch (task)
+                    {
+                    case 1:
+                        Task_insert_time(mas_dyn, N);
+                        system("pause"); system("cls");
+                        break;
+                    case 2:
+                        if (count_ == 0 && N == 0) { cout << "Список и массив пусты"; system("pause"); system("cls"); break; }
+                        if (count_ == 0) { cout << "Список пуст"; system("pause"); system("cls"); break; }
+                        if (N == 0) { cout << "Массив пуст"; system("pause"); system("cls"); break; }
+                        Task_del_time(mas_dyn, N);
+                        system("pause"); system("cls");
+                        break;
+
+                    case 3:
+                        Task_find_time(mas_dyn, N);
+                        system("pause"); system("cls");
+                        break;
+                    case 0:
+                        break;
+                    }
+
+                } while (task != 0);
+
+
+
+
+                while (head) {
+                    tail = head->next;
+                    delete head;
+                    head = tail;
+                }
+
+                delete[] mas_dyn;
+            }
+            case 3:
+                end = 0;
+                return 0;
+            }
+        }
+    }
